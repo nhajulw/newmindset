@@ -328,7 +328,7 @@ def home(published):
         hero = '<section class="empty torn"><p class="hand big">អត្ថបទដំបូងនឹងមកដល់ឆាប់ៗនេះ</p><p class="typed">The first story is on its way.</p></section>'
         rest = ""
     else:
-        hero = f'<section class="featured"><p class="typed kicker">ថ្មីបំផុត · Latest</p>{cover(published[0], linked=True)}<p class="read-on"><a class="btn" href="{u(f"posts/{published[0]["slug"]}/")}">អានបន្ត · Read →</a></p></section>'
+        hero = f'<section class="featured"><p class="typed kicker">ថ្មីបំផុត · Latest</p>{cover(published[0], linked=True)}<p class="read-on"><a class="btn" href="{u("posts/" + published[0]["slug"] + "/")}">អានបន្ត · Read →</a></p></section>'
         rest = ('<section class="recent"><h2 class="hand-title">រឿងមុនៗ <i>Earlier stories</i></h2><div class="cards">'
                 + "".join(card(p, i) for i, p in enumerate(published[1:])) + "</div></section>") if len(published) > 1 else ""
     intro = f'<section class="intro"><p class="hand big">{esc(cfg["tagline_km"])}</p><p class="typed">{esc(cfg["tagline_en"])}</p>{SVG["arrow"]}</section>'
