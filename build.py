@@ -63,6 +63,13 @@ def en_date(d):
 
 # ---------------------------------------------------------------- doodles (inline SVG, colours from CSS)
 
+ICON = {  # footer platform icons, drawn in currentColor
+    "youtube": '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4.5" fill="currentColor"/><path d="M10 9v6l5.2-3z" fill="var(--white)"/></svg>',
+    "facebook": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8.2h2.8l.4-3.3h-3.2V8.4c0-.9.3-1.6 1.6-1.6h1.7V3.9a23 23 0 0 0-2.5-.1c-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.3h2.8V22z" fill="currentColor"/></svg>',
+    "instagram": '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg>',
+    "rss": '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 11a8 8 0 0 1 8 8M5 5a14 14 0 0 1 14 14"/><circle cx="6" cy="18" r="1.6" fill="currentColor" stroke="none"/></svg>',
+}
+
 SVG = {
     "clip": '<svg class="clip" viewBox="0 0 24 64" aria-hidden="true"><path d="M8 20v28a6 6 0 0 0 12 0V12a9 9 0 0 0-18 0v34a12 12 0 0 0 24 0V22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
     "safety": '<svg class="safety" viewBox="0 0 90 24" aria-hidden="true"><path d="M6 12h70a6 6 0 1 0-6-6M6 12c0 3 2 5 5 5h62" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="8" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="74" y="4" width="12" height="16" rx="4" fill="currentColor" opacity=".35"/></svg>',
@@ -260,7 +267,7 @@ def page(title, content, desc="", image="", path="", noindex=False, body_cls="")
     og_img = f'<meta property="og:image" content="{esc(absu(image))}">' if image else ""
     return f'''<!doctype html><html lang="km"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f4f0e8">
+<meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f4f0e8" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#1a1815" media="(prefers-color-scheme: dark)">
 <title>{esc(title)}</title><meta name="description" content="{esc(desc)}">
 {'<meta name="robots" content="noindex">' if noindex else ''}
 <meta property="og:type" content="article"><meta property="og:title" content="{esc(title)}">
@@ -280,7 +287,8 @@ def page(title, content, desc="", image="", path="", noindex=False, body_cls="")
 <main>{content}</main>
 <footer class="foot"><div class="squig">{SVG["squiggle"]}</div>
 <p class="hand">{esc(cfg["tagline_km"])}</p>
-<p class="links"><span class="follow">{esc(NAME)} on</span> <a href="{esc(cfg["links"]["youtube"])}">YouTube</a> · <a href="{esc(cfg["links"]["facebook"])}">Facebook</a> · <a href="{esc(cfg["links"]["instagram"])}">Instagram</a> · <a href="{u("feed.xml")}">RSS</a> · <a href="{esc(cfg["policies"])}">Privacy</a></p>
+<nav class="social" aria-label="Follow {esc(NAME)}"><a href="{esc(cfg["links"]["youtube"])}" aria-label="YouTube" title="YouTube">{ICON["youtube"]}</a><a href="{esc(cfg["links"]["facebook"])}" aria-label="Facebook" title="Facebook">{ICON["facebook"]}</a><a href="{esc(cfg["links"]["instagram"])}" aria-label="Instagram" title="Instagram">{ICON["instagram"]}</a><a href="{u("feed.xml")}" aria-label="RSS feed" title="RSS">{ICON["rss"]}</a></nav>
+<p class="fine typed small"><a href="{esc(cfg["policies"])}">Privacy</a></p>
 <p class="typed small">© {dt.date.today().year} {esc(NAME)}</p></footer>
 <script src="{u("static/site.js")}"></script></body></html>'''
 
