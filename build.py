@@ -266,8 +266,8 @@ def page(title, content, desc="", image="", path="", noindex=False, body_cls="")
 <meta property="og:type" content="article"><meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{esc(absu(path))}">{og_img}
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{u("static/icon-32.png")}" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="{u("static/icon-180.png")}"><link rel="manifest" href="{u("static/site.webmanifest")}">
+<link rel="icon" href="{u("static/icon.svg")}" type="image/svg+xml"><link rel="icon" href="{u("static/icon-32.png")}?v=2" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{u("static/icon-180.png")}?v=2"><link rel="manifest" href="{u("static/site.webmanifest")}">
 <meta property="og:site_name" content="{esc(NAME)}"><meta name="application-name" content="{esc(NAME)}"><meta name="apple-mobile-web-app-title" content="{esc(NAME)}">
 <link rel="alternate" type="application/rss+xml" title="{esc(NAME)}" href="{u("feed.xml")}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -275,7 +275,7 @@ def page(title, content, desc="", image="", path="", noindex=False, body_cls="")
 <link rel="stylesheet" href="{u("static/style.css")}">
 <script>document.documentElement.classList.add("js")</script>
 </head><body class="{body_cls}">
-<header class="mast"><a class="logo" href="{u("")}" aria-label="{esc(NAME)}"><img class="logo-icon" src="{u("static/icon-180.png")}" alt="" width="44" height="44"><span class="logo-km">{esc(cfg["name_km"])}</span><span class="logo-en">- {esc(cfg["name_en"])}</span></a>
+<header class="mast"><a class="logo" href="{u("")}" aria-label="{esc(NAME)}"><img class="logo-icon" src="{u("static/icon.svg")}" alt="" width="44" height="44"><span class="logo-km">{esc(cfg["name_km"])}</span><span class="logo-en">- {esc(cfg["name_en"])}</span></a>
 <nav class="cats">{"".join(cat_chip(k, small=True) for k in cfg["categories"])}</nav></header>
 <main>{content}</main>
 <footer class="foot"><div class="squig">{SVG["squiggle"]}</div>

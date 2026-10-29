@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <title>គំនិតថ្មី - New Mindset</title>
+  <circle cx="100" cy="100" r="100" fill="#211c18"/>
+  <g transform="translate(100 100) scale(0.84) translate(-100 -100)">
+    <g transform="translate(0 13)">
+      <path d="M100 8V20M46 28L55 38M154 28L145 38" fill="none" stroke="#F2B33D" stroke-width="8" stroke-linecap="round"/>
+      <path d="M100 34A46 46 0 0 1 133 112C126 120 124 126 124 134H76C76 126 74 120 67 112A46 46 0 0 1 100 34Z" fill="#F7F0E4"/>
+      <path d="M100 64C112 79 115 92 108 104C104 110 96 110 92 104C85 92 88 79 100 64Z" fill="#F2B33D"/>
+      <rect x="80" y="142" width="40" height="10" rx="5" fill="#F7F0E4"/>
+      <rect x="88" y="158" width="24" height="8" rx="4" fill="#F7F0E4"/>
+    </g>
+  </g>
+</svg>
