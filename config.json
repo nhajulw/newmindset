@@ -1,0 +1,36 @@
+{
+  "name_km": "គំនិតថ្មី",
+  "name_en": "New Mindset",
+  "tagline_km": "រឿងខ្លី ការពិតធំ — អានបន្ថែមពីវីដេអូនីមួយៗ",
+  "tagline_en": "Short videos, big truths — the full story behind each one",
+  "base_url": "https://nhajulw.github.io",
+  "base_path": "/newmindset",
+  "language": "km",
+  "categories": {
+    "life-work": {
+      "km": "ជីវិត និងការងារ",
+      "en": "Life & Work",
+      "color": "#b8a9dc",
+      "ink": "#4b3f86"
+    },
+    "money": {
+      "km": "លុយកាក់",
+      "en": "Money",
+      "color": "#a9c9b0",
+      "ink": "#2f5d43"
+    },
+    "history": {
+      "km": "ប្រវត្តិសាស្ត្រ",
+      "en": "History",
+      "color": "#d6c2a4",
+      "ink": "#6e3b2f"
+    }
+  },
+  "links": {
+    "youtube": "https://www.youtube.com/@%E1%9E%82%E1%9F%86%E1%9E%93%E1%9E%B7%E1%9E%8F%E1%9E%90%E1%9F%92%E1%9E%98%E1%9E%B8-NewMindset/shorts",
+    "facebook": "https://www.facebook.com/profile.php?id=100090805246701",
+    "instagram": "https://www.instagram.com/nnewmindsett/"
+  },
+  "policies": "https://claude.ai/artifact/WHADPHqQG74CtizkhJVMLy",
+  "site_name": "គំនិតថ្មី - New Mindset"
+}
