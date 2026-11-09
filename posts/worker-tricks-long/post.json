@@ -180,5 +180,8 @@
   },
   "publishAt": "2026-11-10T12:00+07:00",
   "layout": "pinboard",
-  "video": {}
+  "video": {
+    "youtube_id": "0Uz6WcJK98E",
+    "url": "https://youtube.com/watch?v=0Uz6WcJK98E"
+  }
 }
