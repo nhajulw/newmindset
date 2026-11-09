@@ -269,6 +269,7 @@ def page(title, content, desc="", image="", path="", noindex=False, body_cls="")
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f4f0e8" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#1a1815" media="(prefers-color-scheme: dark)">
 <title>{esc(title)}</title><meta name="description" content="{esc(desc)}">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8973557291360333" crossorigin="anonymous"></script>
 {'<meta name="robots" content="noindex">' if noindex else ''}
 <meta property="og:type" content="article"><meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}"><meta property="og:url" content="{esc(absu(path))}">{og_img}
@@ -411,6 +412,7 @@ def main():
         write(f"category/{cid}/index.html", category_page(cid, [p for p in published if p["category"] == cid]))
     write("feed.xml", feed(published))
     write("sitemap.xml", sitemap(published))
+    write("ads.txt", "google.com, pub-8973557291360333, DIRECT, f08c47fec0942fa0\n")  # AdSense seller record
     write("404.html", page("404", '<section class="empty torn"><p class="hand big">រកមិនឃើញទំព័រនេះទេ</p><p class="typed">Page not found.</p></section>'))
     write(".nojekyll", "")
     print(f"built {len(posts)} post page(s), {len(published)} listed (now {now:%Y-%m-%d %H:%M} ICT) → _site/")
