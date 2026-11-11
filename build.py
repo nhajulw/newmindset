@@ -424,9 +424,8 @@ TERMS_HTML = """<article class="legal typed"><h1>Terms of Service</h1>
 
 STUDIO_HTML = """<article class="legal typed studio"><h1>TikTok publishing studio</h1>
 <p>New Mindset's private tool for posting the owner's own approved videos to TikTok. It works with a helper running on the owner's computer.</p>
-<div id="st-off" class="card" hidden><b>Helper not running.</b> On the owner's computer run <code>python3 scripts/tiktok-studio.py</code>, then reload this page.</div>
 <section class="card"><h2>1. Connect TikTok <small>(Login Kit · user.info.basic)</small></h2>
-<p id="acct">Checking…</p><button id="connect">Connect TikTok</button></section>
+<p id="acct">Checking…</p><button id="connect">Connect TikTok</button> <button id="sync">Sync with helper</button><p id="how" class="hand"></p></section>
 <section class="card"><h2>2. Choose an approved video</h2>
 <div id="vids">…</div></section>
 <section class="card"><h2>3. Post <small>(Content Posting API · video.publish / video.upload)</small></h2>
@@ -436,20 +435,40 @@ STUDIO_HTML = """<article class="legal typed studio"><h1>TikTok publishing studi
 <button id="post" disabled>Post to TikTok</button><p id="out" class="hand"></p></section>
 <style>.studio [hidden]{display:none!important}.studio .card{border:2px solid #4b3f86;border-radius:14px;padding:12px 18px;margin:16px 0}.studio button{font:inherit;padding:10px 22px;border-radius:10px;border:2px solid #1a1815;background:#ffe600;cursor:pointer}.studio button:disabled{opacity:.4;cursor:default}.studio .v{display:block;padding:8px;border:1px solid #888;border-radius:8px;margin:6px 0;cursor:pointer}.studio .v.on{background:#ffe60055;border-color:#1a1815}</style>
 <script>
-(function(){var H="http://127.0.0.1:8766",sel=null,$=function(i){return document.getElementById(i)};
+(function(){
+var H="http://127.0.0.1:8766",RET=location.origin+location.pathname,sel=null,S={connected:false,account:null,videos:[],result:""},direct=false;
+var $=function(i){return document.getElementById(i)};
+try{if(location.hash.length>1){var d=JSON.parse(decodeURIComponent(location.hash.slice(1)));S={connected:d.status.connected,account:d.status.account,videos:d.videos,result:d.result||""};
+ localStorage.setItem("tt",JSON.stringify({connected:S.connected,account:S.account,videos:S.videos}));history.replaceState(null,"",RET)}
+ else{var o=JSON.parse(localStorage.getItem("tt")||"null");if(o){S.connected=o.connected;S.account=o.account;S.videos=o.videos}}}catch(e){}
 function j(p,o){return fetch(H+p,o).then(function(r){return r.json().then(function(b){if(!r.ok)throw new Error(b.error||r.status);return b})})}
-function refresh(){return j("/status").then(function(s){$("st-off").hidden=true;
- $("acct").textContent=s.connected?"Connected as "+s.account:(s.connecting?"Waiting for TikTok sign-in…":"Not connected"+(s.error?" ("+s.error+")":""));
- $("connect").textContent=s.connected?"Reconnect TikTok":"Connect TikTok";$("post").disabled=!(s.connected&&sel);return s}).catch(function(){$("st-off").hidden=false;$("acct").textContent="Helper not running"})}
-$("connect").onclick=function(){j("/connect",{method:"POST",body:"{}"}).then(function(){var n=0,t=setInterval(function(){refresh().then(function(s){if(!s||s.connected&&!s.connecting||++n>120)clearInterval(t)})},2000)})};
-j("/videos").then(function(v){$("vids").innerHTML="";v.forEach(function(x){var d=document.createElement("label");d.className="v";
- d.innerHTML='<input type="radio" name="vid"> <b></b> <small></small><br><span></span>';d.querySelector("b").textContent=x.slug;d.querySelector("small").textContent=x.mb+" MB";d.querySelector("span").textContent=x.caption.split(String.fromCharCode(10))[0];
- d.onclick=function(){sel=x.slug;[].forEach.call(document.querySelectorAll(".v"),function(e){e.classList.remove("on")});d.classList.add("on");refresh()};$("vids").appendChild(d)})}).catch(function(){$("vids").textContent="No helper"});
-$("post").onclick=function(){$("post").disabled=true;$("out").textContent="Uploading to TikTok…";
- var m=document.querySelector("input[name=mode]:checked").value;
- j("/post",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({slug:sel,mode:m,privacy:$("privacy").value})})
- .then(function(r){$("out").textContent="Done: "+r.status+" ("+(r.mode==="draft"?"in your TikTok drafts":"posted")+")"}).catch(function(e){$("out").textContent="Error: "+e.message}).then(refresh)};
-refresh()})();
+function render(){
+ $("acct").textContent=S.connected?"Connected as "+S.account:"Not connected";
+ $("connect").textContent=S.connected?"Reconnect TikTok":"Connect TikTok";
+ var v=$("vids");v.innerHTML="";
+ if(!S.videos.length){v.textContent="No videos loaded yet. Click Connect TikTok, or Sync with helper."}
+ S.videos.forEach(function(x){var l=document.createElement("label");l.className="v"+(sel===x.slug?" on":"");
+  l.innerHTML='<input type="radio" name="vid"> <b></b> <small></small><br><span></span>';
+  l.querySelector("b").textContent=x.slug;l.querySelector("small").textContent=x.mb+" MB";
+  l.querySelector("span").textContent=x.caption.split(String.fromCharCode(10))[0];
+  l.onclick=function(){sel=x.slug;render()};v.appendChild(l)});
+ $("post").disabled=!(S.connected&&sel);
+ $("out").textContent=S.result||"";
+ $("how").textContent=direct?"Helper connected.":"Helper opens in a new page and returns here when finished.";
+}
+function go(path){location.href=H+path+(path.indexOf("?")<0?"?":"&")+"return="+encodeURIComponent(RET)}
+$("connect").onclick=function(){
+ if(direct){j("/connect",{method:"POST",body:"{}"}).then(function(){var n=0,t=setInterval(function(){j("/status").then(function(s){S.connected=s.connected;S.account=s.account;render();if(s.connected&&!s.connecting||++n>120)clearInterval(t)})},2000)})}
+ else go("/go/connect")};
+$("sync").onclick=function(){go("/go/state")};
+$("post").onclick=function(){var m=document.querySelector("input[name=mode]:checked").value,p=$("privacy").value;
+ if(!direct){go("/go/post?slug="+encodeURIComponent(sel)+"&mode="+m+"&privacy="+p);return}
+ $("post").disabled=true;$("out").textContent="Uploading to TikTok…";
+ j("/post",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({slug:sel,mode:m,privacy:p})})
+ .then(function(r){S.result="Done: "+r.status+(r.mode==="draft"?" (in your TikTok drafts)":" (posted)")}).catch(function(e){S.result="Error: "+e.message}).then(render)};
+render();
+j("/status").then(function(s){direct=true;S.connected=s.connected;S.account=s.account;return j("/videos")}).then(function(v){S.videos=v;render()}).catch(function(){render()});
+})();
 </script></article>"""
 
 
