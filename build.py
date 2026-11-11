@@ -422,6 +422,37 @@ TERMS_HTML = """<article class="legal typed"><h1>Terms of Service</h1>
 <p>We may change these terms and will update the date above. Questions: contact us through our Facebook page or Instagram account linked in the footer. See also our <a href="/privacy/">Privacy Policy</a>.</p></article>"""
 
 
+STUDIO_HTML = """<article class="legal typed studio"><h1>TikTok publishing studio</h1>
+<p>New Mindset's private tool for posting the owner's own approved videos to TikTok. It works with a helper running on the owner's computer.</p>
+<div id="st-off" class="card" hidden><b>Helper not running.</b> On the owner's computer run <code>python3 scripts/tiktok-studio.py</code>, then reload this page.</div>
+<section class="card"><h2>1. Connect TikTok <small>(Login Kit · user.info.basic)</small></h2>
+<p id="acct">Checking…</p><button id="connect">Connect TikTok</button></section>
+<section class="card"><h2>2. Choose an approved video</h2>
+<div id="vids">…</div></section>
+<section class="card"><h2>3. Post <small>(Content Posting API · video.publish / video.upload)</small></h2>
+<p><label><input type="radio" name="mode" value="direct" checked> Post directly to my profile (video.publish)</label><br>
+<label><input type="radio" name="mode" value="draft"> Send to my TikTok drafts (video.upload)</label></p>
+<p><label>Who can view: <select id="privacy"><option value="SELF_ONLY">Only me</option><option value="PUBLIC_TO_EVERYONE">Everyone</option><option value="MUTUAL_FOLLOW_FRIENDS">Friends</option></select></label></p>
+<button id="post" disabled>Post to TikTok</button><p id="out" class="hand"></p></section>
+<style>.studio [hidden]{display:none!important}.studio .card{border:2px solid #4b3f86;border-radius:14px;padding:12px 18px;margin:16px 0}.studio button{font:inherit;padding:10px 22px;border-radius:10px;border:2px solid #1a1815;background:#ffe600;cursor:pointer}.studio button:disabled{opacity:.4;cursor:default}.studio .v{display:block;padding:8px;border:1px solid #888;border-radius:8px;margin:6px 0;cursor:pointer}.studio .v.on{background:#ffe60055;border-color:#1a1815}</style>
+<script>
+(function(){var H="http://127.0.0.1:8766",sel=null,$=function(i){return document.getElementById(i)};
+function j(p,o){return fetch(H+p,o).then(function(r){return r.json().then(function(b){if(!r.ok)throw new Error(b.error||r.status);return b})})}
+function refresh(){return j("/status").then(function(s){$("st-off").hidden=true;
+ $("acct").textContent=s.connected?"Connected as "+s.account:(s.connecting?"Waiting for TikTok sign-in…":"Not connected"+(s.error?" ("+s.error+")":""));
+ $("connect").textContent=s.connected?"Reconnect TikTok":"Connect TikTok";$("post").disabled=!(s.connected&&sel);return s}).catch(function(){$("st-off").hidden=false;$("acct").textContent="Helper not running"})}
+$("connect").onclick=function(){j("/connect",{method:"POST",body:"{}"}).then(function(){var n=0,t=setInterval(function(){refresh().then(function(s){if(!s||s.connected&&!s.connecting||++n>120)clearInterval(t)})},2000)})};
+j("/videos").then(function(v){$("vids").innerHTML="";v.forEach(function(x){var d=document.createElement("label");d.className="v";
+ d.innerHTML='<input type="radio" name="vid"> <b></b> <small></small><br><span></span>';d.querySelector("b").textContent=x.slug;d.querySelector("small").textContent=x.mb+" MB";d.querySelector("span").textContent=x.caption.split(String.fromCharCode(10))[0];
+ d.onclick=function(){sel=x.slug;[].forEach.call(document.querySelectorAll(".v"),function(e){e.classList.remove("on")});d.classList.add("on");refresh()};$("vids").appendChild(d)})}).catch(function(){$("vids").textContent="No helper"});
+$("post").onclick=function(){$("post").disabled=true;$("out").textContent="Uploading to TikTok…";
+ var m=document.querySelector("input[name=mode]:checked").value;
+ j("/post",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({slug:sel,mode:m,privacy:$("privacy").value})})
+ .then(function(r){$("out").textContent="Done: "+r.status+" ("+(r.mode==="draft"?"in your TikTok drafts":"posted")+")"}).catch(function(e){$("out").textContent="Error: "+e.message}).then(refresh)};
+refresh()})();
+</script></article>"""
+
+
 def main():
     now = dt.datetime.now(ICT)
     if "--now" in sys.argv:
@@ -446,6 +477,7 @@ def main():
     write("404.html", page("404", '<section class="empty torn"><p class="hand big">រកមិនឃើញទំព័រនេះទេ</p><p class="typed">Page not found.</p></section>'))
     for slug, ttl, html in (("privacy", "Privacy Policy - New Mindset", PRIVACY_HTML), ("terms", "Terms of Service - New Mindset", TERMS_HTML)):
         write(f"{slug}/index.html", page(ttl, html.replace("__UPDATED__", LEGAL_UPDATED), desc=ttl, path=f"{slug}/"))
+    write("studio/index.html", page("TikTok studio - New Mindset", STUDIO_HTML, desc="Owner-only publishing tool", path="studio/", noindex=True))
     write(".nojekyll", "")
     print(f"built {len(posts)} post page(s), {len(published)} listed (now {now:%Y-%m-%d %H:%M} ICT) → _site/")
 
