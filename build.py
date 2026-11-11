@@ -478,6 +478,7 @@ def main():
     for slug, ttl, html in (("privacy", "Privacy Policy - New Mindset", PRIVACY_HTML), ("terms", "Terms of Service - New Mindset", TERMS_HTML)):
         write(f"{slug}/index.html", page(ttl, html.replace("__UPDATED__", LEGAL_UPDATED), desc=ttl, path=f"{slug}/"))
     write("studio/index.html", page("TikTok studio - New Mindset", STUDIO_HTML, desc="Owner-only publishing tool", path="studio/", noindex=True))
+    write("privacy/tiktokUvs61a7DHlP9icgjqmSMVDLA4jW4sedN.txt", "tiktok-developers-site-verification=Uvs61a7DHlP9icgjqmSMVDLA4jW4sedN\n")  # TikTok URL-prefix verification
     write(".nojekyll", "")
     print(f"built {len(posts)} post page(s), {len(published)} listed (now {now:%Y-%m-%d %H:%M} ICT) → _site/")
 
