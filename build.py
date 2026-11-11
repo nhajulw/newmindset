@@ -289,7 +289,7 @@ def page(title, content, desc="", image="", path="", noindex=False, body_cls="")
 <footer class="foot"><div class="squig">{SVG["squiggle"]}</div>
 <p class="hand">{esc(cfg["tagline_km"])}</p>
 <nav class="social" aria-label="Follow {esc(NAME)}"><a href="{esc(cfg["links"]["youtube"])}" aria-label="YouTube" title="YouTube">{ICON["youtube"]}</a><a href="{esc(cfg["links"]["facebook"])}" aria-label="Facebook" title="Facebook">{ICON["facebook"]}</a><a href="{esc(cfg["links"]["instagram"])}" aria-label="Instagram" title="Instagram">{ICON["instagram"]}</a><a href="{u("feed.xml")}" aria-label="RSS feed" title="RSS">{ICON["rss"]}</a></nav>
-<p class="fine typed small"><a href="{esc(cfg["policies"])}">Privacy</a></p>
+<p class="fine typed small"><a href="{u("privacy/")}">Privacy</a> · <a href="{u("terms/")}">Terms</a></p>
 <p class="typed small">© {dt.date.today().year} {esc(NAME)}</p></footer>
 <script src="{u("static/site.js")}"></script></body></html>'''
 
@@ -392,6 +392,36 @@ def load_posts():
     return posts
 
 
+LEGAL_UPDATED = "11 November 2026"
+
+PRIVACY_HTML = """<article class="legal typed"><h1>Privacy Policy</h1>
+<p class="hand">គោលការណ៍ឯកជនភាព · Last updated: __UPDATED__</p>
+<p>New Mindset (គំនិតថ្មី) publishes original short videos and articles in Khmer. This policy explains what this website and our publishing tool do with information.</p>
+<h2>This website</h2>
+<p>We do not ask visitors to create an account or give personal details. Like most sites, the web host and our advertising and analytics partners (such as Google AdSense) may use cookies and collect technical data such as IP address, browser and pages viewed. You can control cookies in your browser settings.</p>
+<h2>Our publishing tool and TikTok</h2>
+<p>New Mindset uses a private tool, run by the channel owner, that publishes the owner's own videos to TikTok, YouTube, Facebook and Instagram. When the owner connects a TikTok account through TikTok Login Kit and the Content Posting API, the tool:</p>
+<ul><li>reads the account's basic profile (display name and open ID, scope <b>user.info.basic</b>) to show which account is connected;</li>
+<li>uploads and posts videos that the owner has approved (scopes <b>video.publish</b> and <b>video.upload</b>).</li></ul>
+<p>The tool stores the TikTok access and refresh tokens only on the owner's own computer. We do not sell, share or publish these tokens or any TikTok data, we do not collect data about other TikTok users, and the tool does not post for anyone but the owner. The owner can remove access at any time in TikTok under Settings and privacy, Security and permissions, Apps and websites, and tokens are deleted on request.</p>
+<h2>Children</h2>
+<p>This site is not directed at children under 13 and we do not knowingly collect their data.</p>
+<h2>Changes and contact</h2>
+<p>We may update this policy and will change the date above. Questions: contact us through our Facebook page or Instagram account linked in the footer.</p></article>"""
+
+TERMS_HTML = """<article class="legal typed"><h1>Terms of Service</h1>
+<p class="hand">លក្ខខណ្ឌប្រើប្រាស់ · Last updated: __UPDATED__</p>
+<p>By using newmindset.asia you agree to these terms.</p>
+<h2>Content</h2>
+<p>Articles, videos and images on this site belong to New Mindset (គំនិតថ្មី) unless marked otherwise. You may share links and short quotes with credit. Please do not re-upload our videos or copy full articles without permission. Content is for information and entertainment, not professional financial, legal or medical advice.</p>
+<h2>Publishing tool</h2>
+<p>The New Mindset publishing tool is a private tool used only by the channel owner to post the owner's own content to TikTok, YouTube, Facebook and Instagram. It is not offered to the public. It follows each platform's own terms, including the TikTok Terms of Service and Developer Terms, and every video is approved by the owner before it is posted.</p>
+<h2>Liability</h2>
+<p>The site is provided as is. We try to keep information accurate and cite sources, but we are not liable for losses from using it. Links to other sites are not under our control.</p>
+<h2>Changes and contact</h2>
+<p>We may change these terms and will update the date above. Questions: contact us through our Facebook page or Instagram account linked in the footer. See also our <a href="/privacy/">Privacy Policy</a>.</p></article>"""
+
+
 def main():
     now = dt.datetime.now(ICT)
     if "--now" in sys.argv:
@@ -414,6 +444,8 @@ def main():
     write("sitemap.xml", sitemap(published))
     write("ads.txt", "google.com, pub-8973557291360333, DIRECT, f08c47fec0942fa0\n")  # AdSense seller record
     write("404.html", page("404", '<section class="empty torn"><p class="hand big">រកមិនឃើញទំព័រនេះទេ</p><p class="typed">Page not found.</p></section>'))
+    for slug, ttl, html in (("privacy", "Privacy Policy - New Mindset", PRIVACY_HTML), ("terms", "Terms of Service - New Mindset", TERMS_HTML)):
+        write(f"{slug}/index.html", page(ttl, html.replace("__UPDATED__", LEGAL_UPDATED), desc=ttl, path=f"{slug}/"))
     write(".nojekyll", "")
     print(f"built {len(posts)} post page(s), {len(published)} listed (now {now:%Y-%m-%d %H:%M} ICT) → _site/")
 

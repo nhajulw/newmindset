@@ -400,3 +400,6 @@ html:not(.js) .lang-switch { display: none; }
   .folder-link .f-front, .folder-link .f-back, .cat-head, .cat-head .tab { filter: brightness(.82) saturate(.9); }
   .clip { color: #9aa1a8; } .safety { color: #a7aeb5; }
 }
+
+.legal{max-width:720px;margin:2rem auto;padding:0 16px;line-height:1.7}
+.legal h1{font-size:2rem;margin:.2em 0}.legal h2{margin:1.6em 0 .4em;font-size:1.25rem}.legal ul{padding-left:1.2em}
