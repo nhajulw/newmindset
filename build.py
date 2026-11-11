@@ -480,6 +480,7 @@ def main():
     write("studio/index.html", page("TikTok studio - New Mindset", STUDIO_HTML, desc="Owner-only publishing tool", path="studio/", noindex=True))
     write("privacy/tiktokUvs61a7DHlP9icgjqmSMVDLA4jW4sedN.txt", "tiktok-developers-site-verification=Uvs61a7DHlP9icgjqmSMVDLA4jW4sedN\n")  # TikTok URL-prefix verification
     write("terms/tiktok43ewZ47liQualwHJeVxpqU4V8G3bMD0d.txt", "tiktok-developers-site-verification=43ewZ47liQualwHJeVxpqU4V8G3bMD0d\n")
+    write("tiktokgP8tsy1CQ0rTA7nN67S4i2RrUGfRzqJg.txt", "tiktok-developers-site-verification=gP8tsy1CQ0rTA7nN67S4i2RrUGfRzqJg\n")
     write(".nojekyll", "")
     print(f"built {len(posts)} post page(s), {len(published)} listed (now {now:%Y-%m-%d %H:%M} ICT) → _site/")
 
