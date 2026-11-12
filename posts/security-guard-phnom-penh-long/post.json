@@ -188,5 +188,8 @@
   },
   "publishAt": "2026-11-14T10:00+07:00",
   "layout": "folder",
-  "video": {}
+  "video": {
+    "youtube_id": "piIIsuCYngE",
+    "url": "https://youtube.com/watch?v=piIIsuCYngE"
+  }
 }
